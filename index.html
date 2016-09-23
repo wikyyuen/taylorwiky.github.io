@@ -154,16 +154,16 @@
 
     <div class="post-list-item article">
       <h3 class="article-header">
-        <a href="/2016/09/21/hello-world/" >
-  Hello World
+        <a href="/2016/09/22/第一个个人博客/" >
+  第一个个人博客
 </a>
 
       </h3>
       
 
       <div class="article-info">
-        <a href="/2016/09/21/hello-world/"><span class="article-date">
-  2016-09-21
+        <a href="/2016/09/22/第一个个人博客/"><span class="article-date">
+  2016-09-22
 </span>
 </a>
         
@@ -173,15 +173,18 @@
       </div>
       <div class="article-entry">
         
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>感谢Sean的热心指导，终于将本人的第一个技术blog搭好了，还有就是拥有了属于自己既域名。不知道第一篇blog写点什么，就写一下这个blog搭建时遇到的一些问题吧。</p>
+<h3 id="HEXO"><a href="#HEXO" class="headerlink" title="HEXO"></a>HEXO</h3><p>左边的语句都可以代替右边的语句， 这样用起来就快多了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo g  ==  hexo generate</div><div class="line">hexo d  ==  hexo deploy</div><div class="line">hexo s  ==  hexo server</div><div class="line">hexo n  ==  hexo new</div></pre></td></tr></table></figure>
+<p>在本地跑hexo时启动用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s</div></pre></td></tr></table></figure>
+<p>启动默认是4000端口，如果端口占用就用这句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s -p 5000(写想要端口)</div></pre></td></tr></table></figure>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -C &quot;wikyyuen@gmail.com&quot;</div></pre></td></tr></table></figure>
+<p>用于生成SSH Keys，有了这个就可以上传文件时不再输入用户名和密码。在生成生id_rsa.pub文件里就是公钥，把公钥复制出来，放到Github的SSH and GPG keys里面。</p>
+<h3 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h3><p>在新建Repository时，记得点Initialize this repository with README这个选项，因为这个是自动生成仓库所需要的README文件，不然就要自己上传了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git init</div><div class="line">touch README.md</div><div class="line">git add README.md</div><div class="line">git commit -m &apos;first_commit&apos;</div><div class="line">git remote add origin https://github.com/taylorwiky/taylorwiky.github.io</div><div class="line">git push origin master</div></pre></td></tr></table></figure>
+<h3 id="Domain"><a href="#Domain" class="headerlink" title="Domain"></a>Domain</h3><p>买的Domain是在namecheap上买的1刀的价格还是可以接受的。具体怎么将自己的blog绑到域名上可以参考Sean大神的blog(div.ink)。</p>
 
         
       </div>
