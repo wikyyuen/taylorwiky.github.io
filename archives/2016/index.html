@@ -90,14 +90,14 @@
             
               <li class="tag-list-container">
                 <a href="javascript:;">Tag</a>
-                
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vpn/">vpn</a><span class="tag-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
                 <a href="javascript:;">Archive</a>
-                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016</a><span class="archive-list-count">1</span></li></ul>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016</a><span class="archive-list-count">2</span></li></ul>
               </li>
             
           
@@ -155,6 +155,84 @@
           <h1><a href="/archives/2016" class="archive-year">2016</a></h1>
         </div>
         <div class="post-list">
+    
+  
+
+    <div class="post-list-item article">
+      <h3 class="article-header">
+        <a href="/2016/12/03/RamNode上搭建VPN/" >
+  RamNode上搭建VPN
+</a>
+
+      </h3>
+      
+
+      <div class="article-info">
+        <a href="/2016/12/03/RamNode上搭建VPN/"><span class="article-date">
+  2016-12-03
+</span>
+</a>
+        
+
+        
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vpn/">vpn</a></li></ul>
+	</span>
+
+
+      </div>
+      <div class="article-entry">
+        
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近在RamNode上买了一个vps，15刀一年，性价比还是可以的，就是内存有点小——256M，但小的也有小的用，我就在上面搭了一个vpn。我搭的是pptp，openvpn还没有搭过，网上说pptp要容易一些。下面说一下pptp怎么搭。</p>
+<h4 id="每一步"><a href="#每一步" class="headerlink" title="每一步"></a>每一步</h4><p>首先要看一下自己的vps支不支pptp（据说KVM是默认支持的，OpenVZ就没有打开的）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#cat /dev/net/tun</div></pre></td></tr></table></figure>
+<p>如果返回是cat: /dev/net/tun: File descriptor in bad state就说明支持。</p>
+<p>如果不是，就要登录ramnode的SolusVM CP（这里的用户名和密码都是和ramnode的不同的，在买了vps时收到的邮件里面会有，登录后就可以改名字和密码了）。</p>
+<p>在最下方找到setting，把TUN/TAP和PPP都设成ON，这时vps会重启。（最好刷新一下页面，有可能没设好）</p>
+<h4 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h4><p>安装ppp和iptables</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#yum install -y perl ppp iptables //centos默认安装了iptables和ppp</div></pre></td></tr></table></figure>
+<p>安装pptpd</p>
+<p>先加入yum源：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#rpm -Uvh http://poptop.sourceforge.net/yum/stable/rhel6/x86_64/ppp-2.4.5-33.0.rhel6.x86_64.rpm</div></pre></td></tr></table></figure>
+<p>当然，这要根据自己的vps来选择对应的版本，去这个地址去找吧</p>
+<p><strong><a href="http://poptop.sourceforge.net/yum/stable/packages/" target="_blank" rel="external">http://poptop.sourceforge.net/yum/stable/packages/</a></strong></p>
+<p>然后就是安装了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#yum install pptpd</div></pre></td></tr></table></figure>
+<h4 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h4><p>备份/etc/ppp/options.pptpd，然后修改下面两条内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ms-dns 8.8.8.8</div><div class="line">ms-dns 8.8.4.4</div></pre></td></tr></table></figure>
+<p>解释：ms-dns 8.8.8.8， ms-dns 8.8.4.4是使用google的dns服务器。</p>
+<p>备份/etc/ppp/chap-secrets，然后修改下面两条内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#Secrets for authentication using CHAP</div><div class="line">#client server secret IP addresses</div><div class="line">myusername pptpd mypassword *</div></pre></td></tr></table></figure>
+<p>上面myusername 是写vpn的名字，mypassword是写vpn的密码，后面的*号不要漏了。</p>
+<p>备份/etc/pptpd.conf，然后修改下面两条内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">localip 192.168.9.1</div><div class="line">remoteip 192.168.9.10-235 //表示vpn客户端获得ip的范围</div></pre></td></tr></table></figure>
+<p>注意，上面这个配置文件必须保证最后是以穿行结尾才行，不然会在启动服务时报错。</p>
+<p>配置/etc/sysctl.conf </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">net.ipv4.ip_forward = 0   把这句改成  net.ipv4.ip_forward = 1</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#/sbin/sysctl -p</div></pre></td></tr></table></figure>
+<h4 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h4><p>启动pptp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#/sbin/service pptpd start 或者 #service pptpd start</div></pre></td></tr></table></figure>
+<p>这时就应该能拨上号了，但是还不能上网</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#/sbin/service iptables start //启动iptables</div><div class="line">#iptables -t nat -A POSTROUTING    -s 192.168.9.0/24 -j SNAT --to-source 自己的vps的ip</div><div class="line">#/etc/init.d/iptables save //保存iptables的转发规则</div><div class="line">#/sbin/service iptables restart //重新启动iptables</div></pre></td></tr></table></figure>
+<h4 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h4><p>重启pptp vpn</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#service pptpd restart</div></pre></td></tr></table></figure>
+<p>当然，想要开机直接启动vpn只要这样设置就可以了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#chkconfig pptpd on //开机启动pptp vpn服务</div><div class="line">#chkconfig iptables on //开机启动iptables</div></pre></td></tr></table></figure>
+<p>然后就可以愉快地玩耍啦。</p>
+<h4 id="FAQ："><a href="#FAQ：" class="headerlink" title="FAQ："></a>FAQ：</h4><p>1.重启报错试试下面两句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#service pptpd restart-kill</div><div class="line">#service pptpd start</div></pre></td></tr></table></figure>
+<p>2.如果在不加密的情况下能正常连接，加密就登陆不上，这用手机最容易试出来。</p>
+<p>只要把/etc/ppp/options.pptpd里面的require-mppe-128这一句注释掉，再重启pptp就可以了。</p>
+<p>最后要说一下，当时查了很多资料，找到一篇讲得很好的，附上地址<a href="http://www.dabu.info/centos6-4-structures-pptp-vpn.html，本文也有一些内容转自那里。" target="_blank" rel="external">http://www.dabu.info/centos6-4-structures-pptp-vpn.html，本文也有一些内容转自那里。</a></p>
+
+        
+      </div>
+    </div>
+
+  
+
+  
+  
     
   
 
